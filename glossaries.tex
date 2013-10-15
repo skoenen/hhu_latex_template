@@ -1,0 +1,17 @@
+\usepackage{glossaries}
+
+\newglossary{keywords}{kls}{klo}{Keywords}
+\newcommand{\newkeyword}[2]{\newglossaryentry{#1}{type=keywords,#2}}
+\newcommand{\newglos}[2]{\newglossaryentry{#1}{#2}}
+
+\makeglossaries
+
+\newcommand{\keyword}[1]{\emph{#1}}
+\newcommand{\Keyword}[1]{\emph{#1}}
+%\newcommand{\keyword}[1]{\gls[type=keywords]{#1}}
+%\newcommand{\Keyword}[1]{\Gls[type=keywords]{#1}}
+%\newcommand{\KEYWORD}[1]{\GLS[type=keywords]{#1}}
+%\newcommand{\keywords}[1]{\glspl[type=keywords]{#1}}
+%\newcommand{\Keywords}[1]{\Glspl[type=keywords]{#1}}
+%\newcommand{\KEYWORDS}[1]{\GLSPL[type=keywords]{#1}}
+
