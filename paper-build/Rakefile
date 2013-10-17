@@ -44,6 +44,12 @@ end
 
 puts "Use '#{MAINFILE}' as main file."
 
+if ENV.include? 'QUIET'
+  @quiet = "2>/dev/null 1>/dev/null"
+else
+  @quiet = ""
+end
+
 FINALFILE = 'final.tex'
 
 BOOKLETPSFILE = 'booklet.ps'
@@ -102,7 +108,7 @@ task :open => :pdf do
 
   %w(exo-open gnome-open xdg-open kde-open).each do |prog|
     if sh "which #{prog}"
-      sh "`which` #{prog} #{pdf_file}"
+      sh "`which #{prog}` #{pdf_file}"
       break
     end
   end
@@ -132,7 +138,7 @@ file MAINFILE
 @inkscape_directpdf = (ENV["directpdf"] == nil || ENV["directpdf"].to_i == 1)
 @inkscape_texttopath = (ENV["texttopath"] == nil || ENV["texttopath"].to_i == 1)
 @embed_files = Array.new
-
+@bib_files = Array.new
 
 
 class String
@@ -151,6 +157,33 @@ class String
 
 end
 
+def bibfiles_clean
+  @bib_files.each do |f|
+    if File.exists? File.join(@out_dir, f)
+      File.delete(File.join(@out_dir, f))
+    end
+  end
+end
+
+def bibtex
+  require 'fileutils'
+
+  if @bibtex_used
+    if File.exists?(File.join(@out_dir, MAINFILE.ext("bbl")))
+      File.delete(File.join(@out_dir, MAINFILE.ext("bbl")))
+    end
+
+    bibfiles_clean if @bibtex_used
+
+    @bib_files.each do |f|
+      FileUtils.copy(File.join(@src_dir, f), File.join(@out_dir, f))
+    end
+
+    Dir.chdir(@out_dir)
+    sh "bibtex #{BIBTEX_OPTIONS} #{MAINFILE.ext('')}"
+    Dir.chdir(@src_dir)
+  end
+end
 
 def extract_deps(line, prefix = "")
 
@@ -238,6 +271,7 @@ def extract_deps(line, prefix = "")
         create_short_bib($1)
       end
       @commondeps.push(bibfile)
+      @bib_files.push(bibfile)
     end
     extract_deps(m[3], prefix)
 
@@ -279,6 +313,14 @@ def extract_deps(line, prefix = "")
       puts "#{prefix}  Index detected => MakeIndex with index.ist used"
       @index_used = true
       @makeindexdeps << File.join(@template_dir, "index.ist")
+    end
+    extract_deps(m[2], prefix)
+
+  elsif m = /(.*?)[^%]*\\printglossar(?:y\[.*\]|ies)(.*)/.match(line)
+    extract_deps(m[1], prefix)
+    if not @glossary_used
+      puts "#{prefix}  Glossary detected => MakeIndex for glossaries used"
+      @glossary_used = true
     end
     extract_deps(m[2], prefix)
 
@@ -653,28 +695,49 @@ if @drafts > 0
   puts "------------------------------"
 end
 
-
-file MAINFILE.ext("dvi") => @commondeps + @dvideps + @makeindexdeps do
-  if File.exists?(File.join(@out_dir, MAINFILE.ext("bbl"))) \
-  and @bibtex_used
-    File.delete(File.join(@out_dir, MAINFILE.ext("bbl")))
-  end
-
+def clean_index
   if File.exists?(File.join(@out_dir, MAINFILE.ext("nls"))) \
   and @nomenclature_used
     File.delete(File.join(@out_dir, MAINFILE.ext("nls")))
+  end
+
+  if File.exists?(File.join(@out_dir, MAINFILE.ext("gls"))) \
+  and @glossary_used
+    File.delete(File.join(@out_dir, MAINFILE.ext("gls")))
+  end
+
+  if File.exists?(File.join(@out_dir, MAINFILE.ext("kls"))) \
+  and @glossary_used
+    File.delete(File.join(@out_dir, MAINFILE.ext("kls")))
   end
 
   if File.exists?(File.join(@out_dir, MAINFILE.ext("idx"))) \
   and @index_used
     File.delete(File.join(@out_dir, MAINFILE.ext("idx")))
   end
+end
+
+def make_index
+  Dir.chdir(@out_dir)
+  sh "makeindex #{MAINFILE.ext("nlo")} " \
+     "-s #{File.join(@template_dir, 'nomencl.ist')} " \
+     "-o #{MAINFILE.ext("nls")}" if @nomenclature_used
+
+  sh "makeindex -s #{File.join(@template_dir, 'index.ist')} #{MAINFILE.ext('')}" if @index_used
+
+  if @glossary_used
+    sh "makeglossaries #{MAINFILE.ext('')}"
+  end
+
+  Dir.chdir(@src_dir)
+end
+
+file MAINFILE.ext("dvi") => @commondeps + @dvideps + @makeindexdeps do
+  clean_index()
 
   Dir.chdir(@src_dir)
   sh "latex -output-directory=#{@out_dir} #{MAINFILE}"
-  Dir.chdir(@out_dir)
-  sh "bibtex #{BIBTEX_OPTIONS} #{MAINFILE.ext('')}" if @bibtex_used
-  Dir.chdir(@src_dir)
+  bibtex()
 
   md5 = nil
   counter = 1
@@ -683,14 +746,7 @@ file MAINFILE.ext("dvi") => @commondeps + @dvideps + @makeindexdeps do
       File.open(File.join(@out_dir, MAINFILE.ext("dvi"))).read)))) \
   or (counter >= MAXRUNS)
     counter += 1
-    Dir.chdir(@out_dir)
-    sh "makeindex #{MAINFILE.ext("nlo")} " \
-       "-s #{File.join(@template_dir, nomencl.ist)} " \
-       "-o #{MAINFILE.ext("nls")}" if @nomenclature_used
-
-    sh "makeindex -s #{File.join(@template_dir, index.ist)} #{MAINFILE.ext('')}" if @index_used
-
-    Dir.chdir(@src_dir)
+    make_index()
     sh "latex -output-directory=#{@out_dir} #{MAINFILE}"
   end
 
@@ -730,30 +786,13 @@ end
 
 
 file MAINFILE.ext("pdf") => @commondeps + @pdfdeps + @makeindexdeps do
-  if File.exists?(File.join(@out_dir, MAINFILE.ext("bbl"))) \
-  and @bibtex_used
-    File.delete(File.join(@out_dir, MAINFILE.ext("bbl")))
-  end
-
-  if File.exists?(File.join(@out_dir, MAINFILE.ext("nls"))) \
-  and @nomenclature_used
-    File.delete(File.join(@out_dir, MAINFILE.ext("nls")))
-  end
-
-  if File.exists?(File.join(@out_dir, MAINFILE.ext("idx"))) \
-  and @index_used
-    File.delete(File.join(@out_dir, MAINFILE.ext("idx")))
-  end
+  clean_index()
 
   Dir.chdir(@src_dir)
   sh "pdflatex -output-directory=#{@out_dir} " \
-    "#{MAINFILE} 2>/dev/null 1>/dev/null"
+    "#{MAINFILE} #{@quiet}"
 
-  if @bibtex_used
-    Dir.chdir(@out_dir)
-    sh "bibtex #{BIBTEX_OPTIONS} #{MAINFILE.ext('')}"
-    Dir.chdir(@src_dir)
-  end
+  bibtex()
 
   if @thumbpdf_used
     Dir.chdir(@out_dir)
@@ -768,18 +807,8 @@ file MAINFILE.ext("pdf") => @commondeps + @pdfdeps + @makeindexdeps do
       File.open(File.join(@out_dir, MAINFILE.ext("pdf"))).read))) \
   or (counter >= MAXRUNS)
     counter += 1
-
-    Dir.chdir(@out_dir)
-
-    sh "makeindex #{MAINFILE.ext("nlo")} " \
-        "-s nomencl.ist " \
-        "-o #{MAINFILE.ext("nls")}" if @nomenclature_used
-
-    sh "makeindex -s index.ist #{MAINFILE.ext('')}" if @index_used
-
-    Dir.chdir(@src_dir)
-    sh "pdflatex -output-directory=#{@out_dir} " \
-      "#{MAINFILE} 2>/dev/null 1>/dev/null"
+    make_index
+    sh "pdflatex -output-directory=#{@out_dir} #{MAINFILE} #{@quiet}"
   end
 
   if md5 != Digest::MD5.digest(
@@ -960,10 +989,31 @@ def delete_if_exists(filename)
   end
 end
 
+def delete_if_exists_force(filename)
+  if File.directory?(filename)
+    if Dir[File.join(filename, "*")].size > 0
+      Dir[File.join(filename, "*")].each do |f|
+        delete_if_exists_force(f)
+      end
+    else
+      puts "Deleting #{filename}"
+      Dir.rmdir(filename)
+    end
+  elsif File.exists?(filename)
+    puts "Deleting #{filename}"
+    File.delete(filename)
+  end
+end
+
+
+
 desc "Remove backups, temporary files,..."
 task :clean do
   (tempfile_list + @cleanfiles).sort.each do |f|
     delete_if_exists(f)
+  end
+  Dir[File.join(@out_dir, "*")].each do |e|
+    delete_if_exists_force(e)
   end
 end
 
