@@ -1,0 +1,11 @@
+fig/*.pdf
+*.*lo
+*.*ls
+*.*lg
+*.acn
+*.acr
+*.aux
+*.lof
+*.log
+*.lot
+*.toc
