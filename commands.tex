@@ -2,7 +2,21 @@
 
 \newcommand{\hi}[1]{\textsl{#1}}
 \newcommand{\keyword}[1]{\textsc{#1}}
+
+% Programming specific commands
 \newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\lang}[1]{\textcolor{darkgray}{\texttt{#1}}}
+\newcommand{\module}[1]{\textcolor{AntiqueWhite4}{\texttt{#1}}}
+
 \newcommand{\file}[1]{\uline{\textit{#1}}}
 
 \newcommand{\citate}[2]{\textit{"#1"}\cite{#2}}
+\newcommand{\hint}[2]{%
+	\makebox[\textwidth]{%
+		%\color{black}
+		%\pagecolor{Azure1}
+		\minisec{#1}
+
+		#2
+	}%
+}
