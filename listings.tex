@@ -1,0 +1,38 @@
+\usepackage{listings}
+\lstset{numbers=left}
+\lstset{%
+	basicstyle=\small,
+	keywordstyle=\color{DodgerBlue2},
+	identifierstyle=,
+	commentstyle=\color{Green4}\itshape,
+	stringstyle={\color{violet}\ttfamily},
+	showstringspaces=true
+}
+
+
+\newcommand{\inifile}[1]{%
+	\lstinputlisting[language=command.com,tabsize=4]{#1}
+}
+
+\newcommand{\inisnip}[3]{%
+	\lstinputlisting[%
+		language=command.com,
+		tabsize=4,
+		firstline=#2,
+		firstnumber=#2,
+		lastline=#3]{#1}
+}
+
+\newcommand{\pyfile}[1]{%
+	\lstinputlisting[language=Python,tabsize=4]{#1}
+}
+
+\newcommand{\pysnip}[3]{%
+	\lstinputlisting[%
+		language=Python,
+		tabsize=4,
+		firstline=#2,
+		firstnumber=#2,
+		lastline=#3]{#1}
+}
+
