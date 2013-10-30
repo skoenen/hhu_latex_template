@@ -1,4 +1,12 @@
 \usepackage{prettyref}
 \usepackage{varioref}
+\usepackage{bbding}
+%\usepackage{dingbat}
 
-\newcommand{\pref}[1]{#1~\ref{#1}}
+\newcommand{\pref}[1]{\prettyref{#1}}
+
+\newrefformat{title}{\HandRight~\ref{#1} P.\pageref{#1}}
+\newrefformat{desc}{\PencilRight~\ref{#1} P.\pageref{#1}}
+\newrefformat{hint}{\Info~\ref{#1} P.\pageref{#1}}
+%\newrefformat{fig}{\eye~\ref{#1} P.\pageref{#1}}
+

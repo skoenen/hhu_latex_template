@@ -5,18 +5,31 @@
 
 % Programming specific commands
 \newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\class}[1]{\textcolor{DodgerBlue2}{\texttt{#1}}}
 \newcommand{\lang}[1]{\textcolor{darkgray}{\texttt{#1}}}
-\newcommand{\module}[1]{\textcolor{AntiqueWhite4}{\texttt{#1}}}
+\newcommand{\module}[1]{\textcolor{Firebrick2}{\texttt{#1}}}
 
 \newcommand{\file}[1]{\uline{\textit{#1}}}
 
 \newcommand{\citate}[2]{\textit{"#1"}\cite{#2}}
-\newcommand{\hint}[2]{%
-	\makebox[\textwidth]{%
-		%\color{black}
-		%\pagecolor{Azure1}
-		\minisec{#1}
 
-		#2
-	}%
+\newcommand{\hint}[1]{%
+	\begin{center}
+		\fcolorbox{black}{Azure1}{%
+			\begin{minipage}{0.9\textwidth}
+				#1
+			\end{minipage}
+		}
+	\end{center}
 }
+
+\newcommand{\img}[3]{%
+\begin{figure}[htbp]
+	\begin{center}
+		\label{fig:#3}
+		\includegraphics[width=0.8\textwidth]{#1}
+		\caption{#2}
+	\end{center}
+\end{figure}
+}
+
