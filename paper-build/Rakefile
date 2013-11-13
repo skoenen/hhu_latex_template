@@ -176,7 +176,11 @@ def bibtex
     bibfiles_clean if @bibtex_used
 
     @bib_files.each do |f|
-      FileUtils.copy(File.join(@src_dir, f), File.join(@out_dir, f))
+      if File.exists? File.join(@src_dir, f)
+        FileUtils.copy(File.join(@src_dir, f), File.join(@out_dir, f))
+      elsif File.exists? File.join(@template_dir, f)
+        FileUtils.copy(File.join(@template_dir, f), File.join(@out_dir, f))
+      end
     end
 
     Dir.chdir(@out_dir)
