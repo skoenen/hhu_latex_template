@@ -13,7 +13,7 @@
 
 \newcommand{\inifile}[1]{%
 	\lstinputlisting[
-		caption={\detokinze{#5}},
+		caption={\detokenize{#1}},
 		language=command.com,
 		tabsize=4
 	]{#1}
@@ -22,7 +22,7 @@
 
 \newcommand{\inisnip}[5]{%
 	\lstinputlisting[%
-		caption={\detokinze{#5}},
+		caption={\detokenize{#5}},
 		language=command.com,
 		tabsize=4,
 		firstline=#2,
@@ -34,7 +34,7 @@
 
 \newcommand{\pyfile}[1]{%
 	\lstinputlisting[%
-		caption={\detokinze{#5}},
+		caption={\detokenize{#1}},
 		language=Python,
 		tabsize=4
 	]{#1}
@@ -43,7 +43,7 @@
 
 \newcommand{\pysnip}[5]{%
 	\lstinputlisting[%
-		caption={\detokinze{#5}},
+		caption={\detokenize{#5}},
 		language=Python,
 		tabsize=4,
 		firstline=#2,
@@ -55,7 +55,8 @@
 
 \newcommand{\txtfile}[1]{%
 	\lstinputlisting[%
-		caption={\detokinze{#5}},
+		caption={\detokenize{#1}},
+		breaklines=false,
 		tabsize=4
 	]{#1}
 	\label{lst:txt_#1}
@@ -63,7 +64,8 @@
 
 \newcommand{\txtsnip}[5]{%
 	\lstinputlisting[%
-		caption={\detokinze{#5}},
+		caption={\detokenize{#5}},
+		breaklines=false,
 		tabsize=4,
 		firstline=#2,
 		firstnumber=#2,
