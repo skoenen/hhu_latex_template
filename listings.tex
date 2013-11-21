@@ -12,28 +12,63 @@
 
 
 \newcommand{\inifile}[1]{%
-	\lstinputlisting[language=command.com,tabsize=4]{#1}
+	\lstinputlisting[
+		caption={\detokinze{#5}},
+		language=command.com,
+		tabsize=4
+	]{#1}
+	\label{lst:ini_#1}
 }
 
-\newcommand{\inisnip}[3]{%
+\newcommand{\inisnip}[5]{%
 	\lstinputlisting[%
+		caption={\detokinze{#5}},
 		language=command.com,
 		tabsize=4,
 		firstline=#2,
 		firstnumber=#2,
-		lastline=#3]{#1}
+		lastline=#3
+	]{#1}
+	\label{lst:ini_#4}
 }
 
 \newcommand{\pyfile}[1]{%
-	\lstinputlisting[language=Python,tabsize=4]{#1}
+	\lstinputlisting[%
+		caption={\detokinze{#5}},
+		language=Python,
+		tabsize=4
+	]{#1}
+	\label{lst:py_#1}
 }
 
-\newcommand{\pysnip}[3]{%
+\newcommand{\pysnip}[5]{%
 	\lstinputlisting[%
+		caption={\detokinze{#5}},
 		language=Python,
 		tabsize=4,
 		firstline=#2,
 		firstnumber=#2,
-		lastline=#3]{#1}
+		lastline=#3
+	]{#1}
+	\label{lst:py_#4}
+}
+
+\newcommand{\txtfile}[1]{%
+	\lstinputlisting[%
+		caption={\detokinze{#5}},
+		tabsize=4
+	]{#1}
+	\label{lst:txt_#1}
+}
+
+\newcommand{\txtsnip}[5]{%
+	\lstinputlisting[%
+		caption={\detokinze{#5}},
+		tabsize=4,
+		firstline=#2,
+		firstnumber=#2,
+		lastline=#3
+	]{#1}
+	\label{lst:txt_#4}
 }
 

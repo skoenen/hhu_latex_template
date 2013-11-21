@@ -1,12 +1,16 @@
 \usepackage{prettyref}
 \usepackage{varioref}
 \usepackage{bbding}
-%\usepackage{dingbat}
+\let\Checkmark\relax
+\usepackage{dingbat}
+\let\Cross\relax
+\usepackage{marvosym}
 
 \newcommand{\pref}[1]{\prettyref{#1}}
 
 \newrefformat{title}{\HandRight~\ref{#1} P.\pageref{#1}}
-\newrefformat{desc}{\PencilRight~\ref{#1} P.\pageref{#1}}
+\newrefformat{desc}{\NibSolidRight~\ref{#1} P.\pageref{#1}}
 \newrefformat{hint}{\Info~\ref{#1} P.\pageref{#1}}
-%\newrefformat{fig}{\eye~\ref{#1} P.\pageref{#1}}
+\newrefformat{fig}{\eye~\ref{#1} P.\pageref{#1}}
+\newrefformat{lst}{\smallpencil~\ref{#1} P.\pageref{#1}}
 
