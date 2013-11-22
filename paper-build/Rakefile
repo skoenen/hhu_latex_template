@@ -811,6 +811,7 @@ file MAINFILE.ext("pdf") => @commondeps + @pdfdeps + @makeindexdeps do
       File.open(File.join(@out_dir, MAINFILE.ext("pdf"))).read))) \
   or (counter >= MAXRUNS)
     counter += 1
+    bibtex()
     make_index
     sh "pdflatex -output-directory=#{@out_dir} #{MAINFILE} #{@quiet}"
   end
