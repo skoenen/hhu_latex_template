@@ -14,67 +14,61 @@
 \newcommand{\inifile}[1]{%
 	\lstinputlisting[
 		caption={\normalsize{#1}},
+		label={lst:ini_#1},
 		language=command.com,
 		tabsize=4
 	]{#1}
-	\label{lst:ini_#1}
 }
 
-\newcommand{\inisnip}[5]{%
+\newcommand{\inisnip}[4]{%
 	\lstinputlisting[%
-		caption={\normalsize{#5}},
+		caption={\normalsize{#4}},
+		label={lst:ini_#3},
 		language=command.com,
 		tabsize=4,
-		firstline=#2,
-		firstnumber=#2,
-		lastline=#3
+		linerange={#2},
 	]{#1}
-	\label{lst:ini_#4}
 }
 
 \newcommand{\pyfile}[1]{%
 	\lstinputlisting[%
 		caption={\normalsize{#1}},
+		label={lst:py_#1},
 		language=Python,
 		tabsize=4
 	]{#1}
-	\label{lst:py_#1}
 }
 
-\newcommand{\pysnip}[5]{%
+\newcommand{\pysnip}[4]{%
 	\lstinputlisting[%
-		caption={\normalsize{#5}},
+		caption={\normalsize{#4}},
+		label={lst:py_#3},
 		language=Python,
 		tabsize=4,
-		firstline=#2,
-		firstnumber=#2,
-		lastline=#3
+		linerange={#2},
 	]{#1}
-	\label{lst:py_#4}
 }
 
 \newcommand{\txtfile}[1]{%
 	\lstinputlisting[%
 		caption={\normalsize{#1}},
+		label={lst:txt_#1},
 		breaklines=false,
 		keepspaces=true,
 		showstringspaces=false,
 		tabsize=4
 	]{#1}
-	\label{lst:txt_#1}
 }
 
-\newcommand{\txtsnip}[5]{%
+\newcommand{\txtsnip}[4]{%
 	\lstinputlisting[%
-		caption={\normalsize{#5}},
+		caption={\normalsize{#4}},
+		label={lst:txt_#3},
 		breaklines=false,
 		keepspaces=true,
 		showstringspaces=false,
 		tabsize=4,
-		firstline=#2,
-		firstnumber=#2,
-		lastline=#3
+		linerange={#2},
 	]{#1}
-	\label{lst:txt_#4}
 }
 
