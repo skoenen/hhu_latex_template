@@ -30,6 +30,16 @@
 	]{#1}
 }
 
+\newcommand{\inicode}[3]{%
+	\begin{lstlisting}[%
+		caption={\normalsize{#3}},
+		label={lst:ini_#2},
+		language=command.com,
+		tabsize=4]
+#1
+	\end{lstlisting}
+}
+
 \newcommand{\pyfile}[1]{%
 	\lstinputlisting[%
 		caption={\normalsize{#1}},
@@ -47,6 +57,16 @@
 		tabsize=4,
 		linerange={#2},
 	]{#1}
+}
+
+\newcommand{\pycode}[3]{%
+	\begin{lstlisting}[%
+		caption={\normalsize{#3}},
+		label={lst:py_#2},
+		language=Python,
+		tabsize=4]
+#1
+	\end{lstlisting}
 }
 
 \newcommand{\txtfile}[1]{%
@@ -70,5 +90,17 @@
 		tabsize=4,
 		linerange={#2},
 	]{#1}
+}
+
+\newcommand{\txtcode}[3]{%
+	\begin{lstlisting}[%
+		caption={\normalsize{#3}},
+		label={lst:txt_#2},
+		breaklines=false,
+		keepspaces=true,
+		showstringspaces=false
+		tabsize=4]
+#1
+	\end{lstlisting}
 }
 
